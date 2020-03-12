@@ -21,6 +21,14 @@ const putPhoto = (req, res) => {
         res.status(HttpStatus.CONFLICT).json({error: "photo already exists"});
         return;
     }
+    if (req.body.title < 1) {
+        res.status(HttpStatus.BAD_REQUEST).json({error: "Invalid title"});
+        return;
+    }
+    if (!req.body.filename.includes('.png') && !req.body.filename.includes('.jpg')) {
+        res.status(HttpStatus.BAD_REQUEST).json({error: "Invalid filename"});
+        return;
+    }
     photos.push({
         id: photos.length + 1,
         title: req.body.title,

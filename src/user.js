@@ -22,6 +22,21 @@ const putUser = (req, res) => {
         res.status(HttpStatus.CONFLICT).json({error: "User already exists"});
         return;
     }
+    const regexWhole = /[A-Za-z0-9]+/;
+    const regexDigits = /[0-9]+/;
+    const regexLetters = /[A-Za-z]+/;
+
+    if ((!regexDigits.test(req.body.password) || !regexLetters.test(req.body.password) || (!regexWhole.test(req.body.password)) ||
+        (req.body.password.length < 6) || (req.body.password.length > 16))) {
+        res.status(HttpStatus.BAD_REQUEST).json({error: "Invalid password"});
+        return;
+    }
+
+    if (req.body.username.includes("_") || (req.body.username.includes(" ")
+        || (req.body.username.length < 2 || req.body.username.length > 16))) {
+        res.status(HttpStatus.BAD_REQUEST).json({error: "Invalid username"});
+        return;
+    }
     users.push({
         id: users.length + 1,
         username: req.body.username,
